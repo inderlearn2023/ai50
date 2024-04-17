@@ -264,9 +264,9 @@ class MinesweeperAI():
             2) are not known to be mines
         """
         possible_moves = []
-        for r in range(self.height):
-            for c in range(self.width):
-                cell = (r, c)
+        for i in range(self.height):
+            for j in range(self.width):
+                cell = (i, j)
                 if cell not in self.moves_made and cell not in self.mines:
                     possible_moves.append(cell)
 
