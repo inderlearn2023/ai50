@@ -198,8 +198,8 @@ class MinesweeperAI():
         # 3) add a new sentence to the AI's knowledge base based on the value of `cell` and `count`
         neighbors = set()
 
-        for c in range(cell[0] - 1, cell[0] + 2):
-            for r in range(cell[1] - 1, cell[1] + 2):
+        for r in range(cell[0] - 1, cell[0] + 2):
+            for c in range(cell[1] - 1, cell[1] + 2):
                 if (r, c) == cell:
                     continue
 
