@@ -105,10 +105,8 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        if len(self.cells) == self.count:
+        if len(self.cells) == self.count and self.count != 0:
             return self.cells
-
-        return set()
 
     def known_safes(self):
         """
@@ -116,7 +114,6 @@ class Sentence():
         """
         if self.count == 0:
             return self.cells
-        return set()
 
     def mark_mine(self, cell):
         """
@@ -199,8 +196,8 @@ class MinesweeperAI():
         # 3) add a new sentence to the AI's knowledge base based on the value of `cell` and `count`
         neighbors = set()
 
-        for c in (cell[0] - 1, cell[0] + 2):
-            for r in (cell[1] - 1, cell[1] + 2):
+        for c in range(cell[0] - 1, cell[0] + 2):
+            for r in range(cell[1] - 1, cell[1] + 2):
                 if (r, c) == cell:
                     continue
 
