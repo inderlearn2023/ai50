@@ -198,17 +198,17 @@ class MinesweeperAI():
         # 3) add a new sentence to the AI's knowledge base based on the value of `cell` and `count`
         neighbors = set()
 
-        for r in range(cell[0] - 1, cell[0] + 2):
-            for c in range(cell[1] - 1, cell[1] + 2):
-                if (r, c) == cell:
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
+                if (i, j) == cell or (i, j) in self.safes:
                     continue
 
-                if (r, c) in self.mines:
+                if (i, j) in self.mines:
                     count -= 1
                     continue
 
-                if 0 <= r < self.height and 0 <= c < self.width and (r, c) not in self.safes:
-                    neighbors.add((r, c))
+                if 0 <= i < self.height and 0 <= i < self.width:
+                    neighbors.add((i, j))
 
         self.knowledge.append(Sentence(neighbors, count))
 
