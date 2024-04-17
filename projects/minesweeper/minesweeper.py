@@ -207,7 +207,7 @@ class MinesweeperAI():
                     count -= 1
                     continue
 
-                if 0 <= i < self.height and 0 <= i < self.width:
+                if 0 <= i < self.height and 0 <= j < self.width:
                     neighbors.add((i, j))
 
         self.knowledge.append(Sentence(neighbors, count))
