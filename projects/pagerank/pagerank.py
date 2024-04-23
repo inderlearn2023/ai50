@@ -91,14 +91,12 @@ def sample_pagerank(corpus, damping_factor, n):
 
     # select random page
     page = random.choice(list(corpus.keys()))
-    dict_pages[page] = 1/n
+    dict_pages[page] += 1/n
 
-    for i in range(0, n-1):
-        page_prob = transition_model(corpus, page, damping_factor)
-        for p in dict_pages:
-            dict_pages[p] = (dict_pages[p] * i + page_prob[p]) / (i+1)
-        random_page = random.choices(list(page_prob.keys()), list(page_prob.values()), k=1)
-        page = random_page[0]
+    for i in range(1, n):
+        model = transition_model(corpus, page, damping_factor)
+        page = random.choices(list(model.keys()), list(model.values()), k=1)[0]
+        dict_pages[page] += 1/n
     return dict_pages
 
 def iterate_pagerank(corpus, damping_factor):
