@@ -97,7 +97,8 @@ def sample_pagerank(corpus, damping_factor, n):
     for i in range(1, n):
         page_prob = transition_model(corpus, page, damping_factor)
         random_page = random.choices(list(page_prob.keys()), list(page_prob.values()))
-        dict_pages[random_page[0]] += 1 / n
+        page = random_page[0]
+        dict_pages[page] += 1 / n
 
     return dict_pages
 
