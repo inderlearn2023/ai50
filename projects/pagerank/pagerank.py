@@ -92,7 +92,7 @@ def sample_pagerank(corpus, damping_factor, n):
 
     # Calculate PageRank values for each page by sampling `n` pages
     # according to transition model, starting with a page at random.
-    page = random.choice(corpus.keys())
+    page = random.choice(list(corpus.keys()))
 
     for i in range(1, n):
         page_prob = transition_model(corpus, page, damping_factor)
@@ -116,16 +116,21 @@ def iterate_pagerank(corpus, damping_factor):
     for page in corpus:
         page_rank_dict[page] = 1/total_pages
 
-    page_count = 0
-    while page_count < total_pages:
+    continue_loop = True
+    while continue_loop:
+        continue_loop = False
         for page in corpus:
             new_rank = (1 - damping_factor) / total_pages
             pr_sum = sum(page_rank_dict[key] / len(corpus[key]) for key in corpus if page in corpus[key])
 
-            page_rank_dict[page] = new_rank + damping_factor * pr_sum
+            new_rank += damping_factor * pr_sum
+            rank_diff = abs(page_rank_dict[page] - new_rank)
+            # print(f"  {page}: old rank: {page_rank_dict[page]:.4f}: new rank: {new_rank:.4f}: diff: {rank_diff:.4f}")
 
-            if abs(page_rank_dict[page] - new_rank) <= 0.001:
-                page_count += 1
+            if rank_diff > 0.001:
+                continue_loop = True
+
+            page_rank_dict[page] = new_rank
 
     return page_rank_dict
 
