@@ -123,13 +123,13 @@ def iterate_pagerank(corpus, damping_factor):
 
         for page in corpus:
             page_rank_dict[page] = (1 - damping_factor) / len(corpus)
-            pr_sum = sum(page_rank_dict[page] / len(corpus[key]) for key in corpus if page in corpus[key])
+            pr_sum = sum(page_rank_dict[key] / len(corpus[key]) for key in corpus if page in corpus[key])
 
             page_rank_dict[page] += damping_factor * pr_sum
 
             if abs(page_rank_dict[page] - new_rank) < 0.001:
                 page_count += 1
-                
+
     return page_rank_dict
 
 
