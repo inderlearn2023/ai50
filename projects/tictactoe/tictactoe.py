@@ -54,6 +54,9 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
+
+    if action[0] < 0 or action[1] > 9:
+        raise IndexError("out of bounds")
     # copy the board to update
     updated_board = copy.deepcopy(board)
 
