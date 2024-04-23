@@ -57,6 +57,7 @@ def result(board, action):
 
     if action[0] < 0 or action[1] > 9:
         raise IndexError("out of bounds")
+
     # copy the board to update
     updated_board = copy.deepcopy(board)
 
@@ -72,14 +73,14 @@ def winner(board):
     """
     for i in range(3):
         # check the row
-        if (board[i][0] != EMPTY) and (board[i][0] == board[i][1] == board[i][2]):
+        if (board[i][0] in (X, O)) and (board[i][0] == board[i][1] == board[i][2]):
             return board[i][0]
         # check column
-        if (board[0][i] != EMPTY) and (board[0][i] == board[1][i] == board[2][i]):
+        if (board[0][i] in (X, O)) and (board[0][i] == board[1][i] == board[2][i]):
             return board[0][i]
 
     # check diagonals
-    if (board[1][1] != EMPTY) and ((board[0][0] == board[1][1] == board[2][2]) or (board[0][2] == board[1][1] == board[2][0])):
+    if (board[1][1] in (X, O)) and ((board[0][0] == board[1][1] == board[2][2]) or (board[0][2] == board[1][1] == board[2][0])):
         return board[1][1]
 
     # no winner
@@ -116,50 +117,35 @@ def minimax(board):
     if terminal(board):
         return None
 
-    val, move = min_value(board) if player(board) == X else max_value(board)
-    return move
+    moves = []
 
+    p = player(board)
 
-def max_value(board, alpha=-math.inf, beta=math.inf):
-    if terminal(board):
-        return utility(board), None
-
-    val = -math.inf
-    move = None
     for action in actions(board):
-        # Calculate the value of the resulting board
-        result_value, _ = min_value(result(board, action), alpha, beta)
+        score = min_value(result(board, action)) if p == X else max_value(result(board, action))
+        # Store options in list
+        moves.append([score, action])
+        # Return highest value action
+    return sorted(moves, reverse=(p == X))[0][1]
 
-        # Update alpha if necessary
-        if result_value > val:
-            val = result_value
-            move = action
-            if val == 1:  # Found winning move
-                return val, move
-            alpha = max(alpha, val)
-            if alpha >= beta:  # Beta cutoff
-                break
-
-    return val, move
-
-def min_value(board, alpha=-math.inf, beta=math.inf):
+def max_value(board):
+    # Check for terminal state
     if terminal(board):
-        return utility(board), None
+        return utility(board)
 
-    val = math.inf
-    move = None
+    # Loop through all possible actions
+    value = -math.inf
     for action in actions(board):
-        # Calculate the value of the resulting board
-        result_value, _ = max_value(result(board, action), alpha, beta)
+        value = max(value, min_value(result(board, action)))
+    return value
 
-        # Update beta if necessary
-        if result_value < val:
-            val = result_value
-            move = action
-            if val == -1:  # Found winning move
-                return val, move
-            beta = min(beta, val)
-            if alpha >= beta:  # Alpha cutoff
-                break
+def min_value(board):
+    # Check for terminal state
+    if terminal(board):
+        return utility(board)
 
-    return val, move
+    # Loop through all possible actions
+    value = math.inf
+    for action in actions(board):
+        value = min(value, max_value(result(board, action)))
+    return value
