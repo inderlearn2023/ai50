@@ -20,6 +20,7 @@ def main():
     for page in sorted(ranks):
         print(f"  {page}: {ranks[page]:.4f}")
 
+    ranks = sample_pagerank({'1': {'2'}, '2': {'3', '1'}, '3': {'2', '4'}, '4': {'2'}}, .85, SAMPLES)
 
 def crawl(directory):
     """
@@ -93,15 +94,12 @@ def sample_pagerank(corpus, damping_factor, n):
     # Calculate PageRank values for each page by sampling `n` pages
     # according to transition model, starting with a page at random.
     page = random.choice(list(corpus.keys()))
-
-    dict_pages[page] = 1/n
-
-    for i in range(0, n-1):
+    for i in range(1, n):
         page_prob = transition_model(corpus, page, damping_factor)
+        for p in dict_pages:
+            dict_pages[p] = (dict_pages[p] * (i-1) + page_prob[page]) / i
         random_page = random.choices(list(page_prob.keys()), list(page_prob.values()), k=1)
-        dict_pages[random_page[0]] += 1/n
         page = random_page[0]
-
     return dict_pages
 
 def iterate_pagerank(corpus, damping_factor):
