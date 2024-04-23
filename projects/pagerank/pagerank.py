@@ -117,21 +117,17 @@ def iterate_pagerank(corpus, damping_factor):
         page_rank_dict[page] = 1/total_pages
 
     page_count = 0
-    while page_count < len(corpus):
-        new_rank = (1 - damping_factor) / total_pages
-
-
+    while page_count < total_pages:
         for page in corpus:
-            page_rank_dict[page] = (1 - damping_factor) / len(corpus)
+            new_rank = (1 - damping_factor) / total_pages
             pr_sum = sum(page_rank_dict[key] / len(corpus[key]) for key in corpus if page in corpus[key])
 
-            page_rank_dict[page] += damping_factor * pr_sum
+            page_rank_dict[page] = new_rank + damping_factor * pr_sum
 
-            if abs(page_rank_dict[page] - new_rank) < 0.001:
+            if abs(page_rank_dict[page] - new_rank) <= 0.001:
                 page_count += 1
 
     return page_rank_dict
-
 
 if __name__ == "__main__":
     main()
