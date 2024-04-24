@@ -116,12 +116,18 @@ def iterate_pagerank(corpus, damping_factor):
     while repeat:
 
         repeat = False
-        for page in corpus:
+        for page in page_rank_dict:
             new_rank = (1 - damping_factor) / total_pages
-            pr_sum = sum(page_rank_dict[key] / len(corpus[key]) for key in corpus if page in corpus[key])
-            pr_sum += sum(page_rank_dict[key] / total_pages for key in corpus if page not in corpus[key])
+
+            pr_sum = 0.0
+            for link in corpus:
+                if page in corpus[link]:
+                    pr_sum += page_rank_dict[link] / len(corpus[link])
+                if not corpus[link]:
+                    pr_sum += page_rank_dict[link] / total_pages
 
             new_rank += damping_factor * pr_sum
+
             rank_diff = abs(page_rank_dict[page] - new_rank)
             # print(f"  {page}: old rank: {page_rank_dict[page]:.4f}: new rank: {new_rank:.4f}: diff: {rank_diff:.4f}")
 
