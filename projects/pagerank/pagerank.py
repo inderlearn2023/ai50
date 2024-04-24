@@ -83,10 +83,7 @@ def sample_pagerank(corpus, damping_factor, n):
     PageRank values should sum to 1.
     """
     # initialize the dictionary with 0 page rank value for all pages
-
-    dict_pages = {}
-    for page in corpus:
-        dict_pages[page] = 0
+    dict_pages = {page: 0 for page in corpus}
 
     # select random page
     page = random.choice(list(corpus.keys()))
@@ -112,23 +109,24 @@ def iterate_pagerank(corpus, damping_factor):
     """
     total_pages = len(corpus)
 
-    page_rank_dict = {}
-    for page in corpus:
-        page_rank_dict[page] = 1/total_pages
+    # initialize the dictionary with normalized page rank value for all pages
+    page_rank_dict = {page: 1/total_pages for page in corpus}
 
-    continue_loop = True
-    while continue_loop:
-        continue_loop = False
+    repeat = True
+    while repeat:
+
+        repeat = False
         for page in corpus:
             new_rank = (1 - damping_factor) / total_pages
             pr_sum = sum(page_rank_dict[key] / len(corpus[key]) for key in corpus if page in corpus[key])
+            pr_sum += sum(page_rank_dict[key] / total_pages for key in corpus if page not in corpus[key])
 
             new_rank += damping_factor * pr_sum
             rank_diff = abs(page_rank_dict[page] - new_rank)
             # print(f"  {page}: old rank: {page_rank_dict[page]:.4f}: new rank: {new_rank:.4f}: diff: {rank_diff:.4f}")
 
             if rank_diff > 0.001:
-                continue_loop = True
+                repeat = True
 
             page_rank_dict[page] = new_rank
 
