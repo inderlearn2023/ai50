@@ -70,8 +70,8 @@ def transition_model(corpus, page, damping_factor):
     for page in corpus:
         prob_distrib[page] = (1 - damping_factor) / len(corpus)
 
-    for link in corpus[page]:
-        prob_distrib[link] += damping_factor / page_link_count
+        for link in corpus[page]:
+            prob_distrib[link] += damping_factor / page_link_count
 
     return prob_distrib
 
