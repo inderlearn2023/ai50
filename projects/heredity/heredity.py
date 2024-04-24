@@ -152,11 +152,15 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             mother_prob = joint_mutation_prob(info["mother"], one_gene, two_genes)
             father_prob = joint_mutation_prob(info["father"], one_gene, two_genes)
             gene_prob = 0
-            for m in range(2):
-                for f in range(2):
-                    gene_prob += mother_prob[m] * father_prob[f] * 0.5
-            if num_genes == 2:
-                gene_prob += (1 - mother_prob[1]) * father_prob[1] + mother_prob[1] * (1 - father_prob[1])
+
+            for i in range(num_genes + 1):
+                # Probability of inheriting i copies of the gene from parents
+                inh_prob = (mother_prob[i] * father_prob[0]) + (mother_prob[0] * father_prob[i]) + (
+                            mother_prob[1] * father_prob[1] * 0.5)
+                # Probability of mutation if inherited gene count is i
+                mut_prob = 1 - PROBS["mutation"] if i == 2 else PROBS["mutation"] if i == 1 else 1
+
+                gene_prob += inh_prob * mut_prob
 
         prob *= gene_prob * trait_prob
 
