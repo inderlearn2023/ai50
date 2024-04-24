@@ -60,7 +60,7 @@ def transition_model(corpus, page, damping_factor):
     prob_distrib = {}
 
     # If page has no outgoing links, then return all pages with equal probability
-    if len(corpus[page]) == 0:
+    if page not in corpus:
         for page in corpus:
             prob_distrib[page] = 1 / len(corpus)
         return prob_distrib
@@ -85,17 +85,20 @@ def sample_pagerank(corpus, damping_factor, n):
     # initialize the dictionary with 0 page rank value for all pages
 
     dict_pages = {}
-    for link in corpus:
-        dict_pages[link] = 0
+    for page in corpus:
+        dict_pages[page] = 0
 
     # select random page
     page = random.choice(list(corpus.keys()))
     dict_pages[page] += 1/n
 
-    for i in range(1, n):
+    page = None
+
+    for i in range(n-1):
         model = transition_model(corpus, page, damping_factor)
         page = random.choices(list(model.keys()), list(model.values()), k=1)[0]
         dict_pages[page] += 1/n
+
     return dict_pages
 
 def iterate_pagerank(corpus, damping_factor):
