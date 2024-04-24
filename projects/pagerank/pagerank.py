@@ -61,15 +61,15 @@ def transition_model(corpus, page, damping_factor):
 
     # If page has no outgoing links, then return all pages with equal probability
     if page not in corpus:
-        for page in corpus:
-            prob_distrib[page] = 1 / len(corpus)
+        for link in corpus:
+            prob_distrib[link] = 1 / len(corpus)
         return prob_distrib
 
-    for page in corpus:
-        prob_distrib[page] = (1 - damping_factor) / len(corpus)
+    for link in corpus:
+        prob_distrib[link] = (1 - damping_factor) / len(corpus)
 
-        for link in corpus[page]:
-            prob_distrib[page] += damping_factor / len(corpus[page])
+        if link in corpus[page]:
+            prob_distrib[link] += damping_factor / len(corpus[page])
 
     return prob_distrib
 
