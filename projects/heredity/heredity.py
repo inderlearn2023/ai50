@@ -158,7 +158,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                 inh_prob = (mother_prob[i] * father_prob[0]) + (mother_prob[0] * father_prob[i]) + (
                             mother_prob[1] * father_prob[1] * 0.5)
                 # Probability of mutation if inherited gene count is i
-                mut_prob = 1 - PROBS["mutation"] if i == 2 else PROBS["mutation"] if i == 1 else 1
+                mut_prob = 1 - PROBS["mutation"] if i == 2 else 0.5 if i == 1 else PROBS["mutation"]
 
                 gene_prob += inh_prob * mut_prob
 
