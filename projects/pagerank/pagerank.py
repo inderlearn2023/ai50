@@ -85,7 +85,7 @@ def sample_pagerank(corpus, damping_factor, n):
     PageRank values should sum to 1.
     """
     # initialize the dictionary with 0 page rank value for all pages
-    
+
     dict_pages = {}
     for link in corpus:
         dict_pages[link] = 0
