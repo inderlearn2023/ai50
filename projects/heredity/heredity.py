@@ -146,21 +146,23 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         num_genes = 2 if person in two_genes else 1 if person in one_gene else 0
         trait_prob = PROBS["trait"][num_genes][person in have_trait]
 
-        if not info["mother"] and not info["father"]:
+        mother = info["mother"]
+        father = info["father"]
+
+        if not mother and not father:
             gene_prob = PROBS["gene"][num_genes]
         else:
-            mother_prob = joint_mutation_prob(info["mother"], one_gene, two_genes)
-            father_prob = joint_mutation_prob(info["father"], one_gene, two_genes)
+            mother_prob = joint_mutation_prob(mother, one_gene, two_genes)
+            father_prob = joint_mutation_prob(father, one_gene, two_genes)
             gene_prob = 0
 
-            for i in range(num_genes + 1):
+            if num_genes == 2:
                 # Probability of inheriting i copies of the gene from parents
-                inh_prob = (mother_prob[i] * father_prob[0]) + (mother_prob[0] * father_prob[i]) + (
-                            mother_prob[1] * father_prob[1] * 0.5)
-                # Probability of mutation if inherited gene count is i
-                mut_prob = 1 - PROBS["mutation"] if i == 2 else 0.5 if i == 1 else PROBS["mutation"]
-
-                gene_prob += inh_prob * mut_prob
+                gene_prob += mother_prob * father_prob
+            elif num_genes == 1:
+                gene_prob += (1 - mother_prob) * father_prob + (1 - father_prob) * mother_prob
+            else:
+                gene_prob += (1 - mother_prob) * (1 - father_prob)
 
         prob *= gene_prob * trait_prob
 
@@ -171,14 +173,11 @@ def joint_mutation_prob(person, one_gene, two_genes):
     Calculate the joint mutation probability of a person.
     """
     if person in two_genes:
-        return [0, 1, 0]
+        return 1 - PROBS["mutation"]
     elif person in one_gene:
-        return [0, 0.5, 0.5]
+        return 0.5
     else:
-        prob_no_genes = PROBS["gene"][0]
-        prob_one_gene = PROBS["mutation"] * 0.5 + (1 - PROBS["mutation"]) * 0.5
-        prob_two_genes = PROBS["mutation"] * 0.5
-        return [prob_no_genes, prob_one_gene, prob_two_genes]
+        return PROBS["mutation"]
 
 
 def update(probabilities, one_gene, two_genes, have_trait, p):
