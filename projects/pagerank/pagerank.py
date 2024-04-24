@@ -59,10 +59,8 @@ def transition_model(corpus, page, damping_factor):
     # Probability distribution dictionary
     prob_distrib = {}
 
-    page_link_count = len(corpus[page])
-
     # If page has no outgoing links, then return all pages with equal probability
-    if page_link_count == 0:
+    if len(corpus[page]) == 0:
         for page in corpus:
             prob_distrib[page] = 1 / len(corpus)
         return prob_distrib
@@ -71,7 +69,7 @@ def transition_model(corpus, page, damping_factor):
         prob_distrib[page] = (1 - damping_factor) / len(corpus)
 
         for link in corpus[page]:
-            prob_distrib[link] += damping_factor / page_link_count
+            prob_distrib[page] += damping_factor / len(corpus[page])
 
     return prob_distrib
 
