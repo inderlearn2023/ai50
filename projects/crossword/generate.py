@@ -165,21 +165,18 @@ class CrosswordCreator():
         puzzle without conflicting characters); return False otherwise.
         """
         seen = set()
-        cons = False
 
         for var, word in assignment.items():
             if var in seen or len(word) != var.length:
-                break
+                return False
 
             seen.add(var)
             for n in self.crossword.neighbors(var).intersection(assignment.keys()):
                 i, j = self.crossword.overlaps[var, n]
                 if word[i] != assignment[n][j]:
-                    break
+                    return False
 
-            cons = True
-
-        return cons
+        return True
 
     def order_domain_values(self, var, assignment):
         """
