@@ -186,7 +186,7 @@ class CrosswordCreator():
         that rules out the fewest values among the neighbors of `var`.
         """
 
-        n = {value: sum(value in self.domains[neighbor] for neighbor in self.crossword.neighbors(var) - assignment) for
+        n = {value: sum(value in self.domains[neighbor] for neighbor in self.crossword.neighbors(var) - set(assignment)) for
              value in self.domains[var]}
 
         return sorted(n, key=lambda value: n[value])
@@ -252,7 +252,6 @@ class CrosswordCreator():
         return None
 
 def main():
-
     # Check usage
     if len(sys.argv) not in [3, 4]:
         sys.exit("Usage: python generate.py structure words [output]")
