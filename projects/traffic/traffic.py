@@ -95,7 +95,8 @@ def get_model():
     ACTIVATION_FUNCTION="relu"
 
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE, activation=ACTIVATION_FUNCTION, input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+        tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE,
+                            activation=ACTIVATION_FUNCTION, input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
         tf.keras.layers.MaxPooling2D(pool_size=POOL_SIZE),
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dropout(DROPOUT),
