@@ -15,7 +15,11 @@ V -> "smiled" | "tell" | "were"
 """
 
 NONTERMINALS = """
-S -> N V
+S -> NP VP | VP NP | S Conj S
+PP -> P NP
+AP -> Adj | Adj AP
+NP -> N | Det N | NP PP | Det AP N
+VP -> V | Adv V | V Adv | V NP | V PP | Adv VP | VP Adv
 """
 
 grammar = nltk.CFG.fromstring(NONTERMINALS + TERMINALS)
@@ -69,7 +73,7 @@ def preprocess(sentence):
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
 
-    # Filter out words that do not contain at least one alphabetic character
+    # Consider the words that contain at least one alphabetic character
     return [word for word in words if any(char.isalpha() for char in word)]
 
 
