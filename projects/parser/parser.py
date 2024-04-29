@@ -81,10 +81,10 @@ def np_chunk(tree):
     noun phrases as subtrees.
     """
     noun_phrase_chunks = []
-
     for subtree in tree.subtrees():
         if subtree.label() == 'NP' and not any(t.label() == 'NP' for t in subtree.subtrees()):
-            noun_phrase_chunks.append(subtree.leaves())
+            noun_phrase_chunks.append(subtree)
+
     return noun_phrase_chunks
 
 
