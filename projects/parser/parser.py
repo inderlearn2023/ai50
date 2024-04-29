@@ -86,8 +86,9 @@ def np_chunk(tree):
     """
     noun_phrase_chunks = []
     for subtree in tree.subtrees(lambda t: t.label() == 'NP'):
-        # if not any(t.label() == 'NP' or t.label() == 'N' for t in subtree.subtrees()):
-        noun_phrase_chunks.append(subtree)
+        np = list(subtree.subtrees(lambda t: t.label() == 'NP' and t != subtree))
+        if not np:
+            noun_phrase_chunks.append(subtree)
 
     return noun_phrase_chunks
 
