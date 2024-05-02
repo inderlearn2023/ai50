@@ -98,9 +98,6 @@ def shortest_path(source, target):
     visited = set()
 
     while True:
-        if queue.empty():
-            return None
-
         node = queue.remove()
         visited.add(node)
 
@@ -112,8 +109,9 @@ def shortest_path(source, target):
                     return get_path(child_node)
 
                 queue.add(child_node)
-                
-        return None
+
+        if queue.empty():
+            return None
 
 def get_path(node):
     path = []
