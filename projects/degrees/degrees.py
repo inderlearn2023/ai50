@@ -118,7 +118,7 @@ def shortest_path(source, target):
 
 
 def get_path(node):
-    if node is None:
+    if node is None or node.parent is None:
         return None
     
     path = []
