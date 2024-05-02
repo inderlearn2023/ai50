@@ -92,7 +92,7 @@ def get_model():
     POOLING_FILTER = 60
     POOL_SIZE = (3,3)
     DROPOUT = 0.2
-    ACTIVATION_FUNCTION="relu"
+    ACTIVATION_FUNCTION = "relu"
 
     model = tf.keras.models.Sequential([
         tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE,
