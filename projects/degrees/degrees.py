@@ -91,6 +91,7 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    
     first_node = Node(state=source, parent=None, action=None)
     queue = QueueFrontier()
     queue.add(first_node)
@@ -98,8 +99,11 @@ def shortest_path(source, target):
     visited = set()
 
     while True:
+        #if the queue is empty, the return none
+        if queue.empty():
+            return None
+        
         node = queue.remove()
-        visited.add(node)
 
         neighbors = neighbors_for_person(node.state)
         for movie, actor in neighbors:
@@ -109,9 +113,9 @@ def shortest_path(source, target):
                     return get_path(child_node)
 
                 queue.add(child_node)
+        visited.add(node)
 
-        if queue.empty():
-            return None
+
 
 def get_path(node):
     if node is None:
