@@ -91,7 +91,11 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
-    
+
+    # if source and target are same, return empty list
+    if source == target:
+        return []
+
     first_node = Node(state=source, parent=None, action=None)
     print(f"first node: actor is {first_node.state} in movies {first_node.action}")
     
@@ -119,6 +123,9 @@ def shortest_path(source, target):
 
 
 def get_path(node):
+    if node is None:
+        return None
+
     path = []
     while node.parent is not None:
         path.append((node.action, node.state))
