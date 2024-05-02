@@ -93,6 +93,8 @@ def shortest_path(source, target):
     """
     
     first_node = Node(state=source, parent=None, action=None)
+    print(f"first node: actor is {first_node.state} in movies {first_node.action}")
+    
     queue = QueueFrontier()
     queue.add(first_node)
 
@@ -104,16 +106,17 @@ def shortest_path(source, target):
             return None
         
         node = queue.remove()
+        visited.add(node.state)
 
         neighbors = neighbors_for_person(node.state)
         for movie, actor in neighbors:
             if actor not in visited and not queue.contains_state(actor):
                 child_node = Node(state=actor, parent=node, action=movie)
+                print(f"child node: actor is {child_node.state} in movies {child_node.action}")
                 if child_node.state == target:
                     return get_path(child_node)
 
                 queue.add(child_node)
-        visited.add(node)
 
 
 
