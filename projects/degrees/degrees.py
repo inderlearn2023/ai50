@@ -114,13 +114,14 @@ def shortest_path(source, target):
             return None
 
 def get_path(node):
+    if node is None:
+        return None
+    
     path = []
-
-    if node is not None:
-        while node.parent is not None:
-            path.append((node.action, node.state))
-            node = node.parent
-        path.reverse()
+    while node.parent is not None:
+        path.append((node.action, node.state))
+        node = node.parent
+    path.reverse()
     return path
 
 def person_id_for_name(name):
