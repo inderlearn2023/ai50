@@ -112,6 +112,8 @@ def shortest_path(source, target):
                     return get_path(child_node)
 
                 queue.add(child_node)
+                
+        return None
 
 def get_path(node):
     path = []
