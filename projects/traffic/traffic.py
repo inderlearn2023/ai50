@@ -61,24 +61,18 @@ def load_data(data_dir):
     images = []
     labels = []
 
-    for category in range(NUM_CATEGORIES):
-        category_dir = os.path.join(data_dir, str(category))
-        for filename in os.listdir(category_dir):
-            # process only the files with .ppm extensions
-            if filename.endswith(".ppm"):
-                filepath = os.path.join(category_dir, filename)
-                try:
-                    # Open image file using cv2
-                    img = cv2.imread(filepath)
-                    # Resize image
-                    img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
-                    # Convert image to numpy array
-                    img_array = np.array(img)
-                    # Append image and label to lists
-                    images.append(img_array)
-                    labels.append(category)
-                except Exception as e:
-                    print(f"Error loading image: {filepath} - {e}")
+    if len(data_dir) > 0:
+        for cat in range(NUM_CATEGORIES):
+            cat_dir = os.path.join(data_dir, str(cat))
+            for filename in os.listdir(cat_dir):
+                filepath = os.path.join(cat_dir, filename)
+                # Read image file
+                img = cv2.imread(filepath)
+                # Resize image
+                img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
+                # Append image and label to lists
+                images.append(img)
+                labels.append(cat)
 
     return images, labels
 
@@ -89,21 +83,20 @@ def get_model():
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
-    POOLING_FILTER = 60
+    POOLING_FILTER = 64
     POOL_SIZE = (3,3)
     DROPOUT = 0.2
     ACTIVATION_FUNCTION = "relu"
 
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE,
-                            activation=ACTIVATION_FUNCTION, input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+        tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE, activation=ACTIVATION_FUNCTION,
+                               input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
         tf.keras.layers.MaxPooling2D(pool_size=POOL_SIZE),
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dropout(DROPOUT),
         # hidden layer
-        tf.keras.layers.Dense(NUM_CATEGORIES * 20, activation=ACTIVATION_FUNCTION),
-        # hidden layer
-        tf.keras.layers.Dense(NUM_CATEGORIES * 10, activation=ACTIVATION_FUNCTION),
+        tf.keras.layers.Dense(NUM_CATEGORIES * 4, activation=ACTIVATION_FUNCTION),
+        tf.keras.layers.Dropout(DROPOUT),
         # output layer
         tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
     ])
