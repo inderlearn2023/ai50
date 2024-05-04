@@ -86,7 +86,14 @@ def get_model():
     POOLING_FILTER = 64
     POOL_SIZE = (3,3)
     DROPOUT = 0.2
-    ACTIVATION_FUNCTION = "relu"
+    ACTIVATION_FUNCTION = "sigmoid"
+    OUT_ACTIVATION_FUNCTION = "softmax"
+
+    print(f"Pooling filter = {POOLING_FILTER}\n"
+          f"Pool size = {POOL_SIZE}\n"
+          f"Dropout = {DROPOUT}\n"
+          f"Activation function = {ACTIVATION_FUNCTION}\n"
+          f"Output activation = {OUT_ACTIVATION_FUNCTION}")
 
     model = tf.keras.models.Sequential([
         tf.keras.layers.Conv2D(POOLING_FILTER, POOL_SIZE, activation=ACTIVATION_FUNCTION,
@@ -96,9 +103,10 @@ def get_model():
         tf.keras.layers.Dropout(DROPOUT),
         # hidden layer
         tf.keras.layers.Dense(NUM_CATEGORIES * 4, activation=ACTIVATION_FUNCTION),
+        # tf.keras.layers.Dense(NUM_CATEGORIES * 2, activation=ACTIVATION_FUNCTION),
         tf.keras.layers.Dropout(DROPOUT),
         # output layer
-        tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
+        tf.keras.layers.Dense(NUM_CATEGORIES, activation=OUT_ACTIVATION_FUNCTION)
     ])
 
     model.compile(
